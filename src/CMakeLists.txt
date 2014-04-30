@@ -17,6 +17,7 @@ add_custom_command(OUTPUT ${MSGPACK_DISPATCH}
     )
 
 file( GLOB NEOVIM_SOURCES *.c )
+file( GLOB NEOVIM_HEADERS *.h )
 
 foreach(sfile ${NEOVIM_SOURCES})
   get_filename_component(f ${sfile} NAME)
@@ -30,6 +31,9 @@ list(APPEND NEOVIM_SOURCES "${PROJECT_BINARY_DIR}/config/auto/pathdef.c")
 list(APPEND NEOVIM_SOURCES "${MSGPACK_DISPATCH}")
 
 file( GLOB OS_SOURCES os/*.c )
+file( GLOB OS_HEADERS os/*.h )
+
+file( GLOB LIB_HEADERS lib/*.h )
 
 set(CONV_SRCS
   api.c
@@ -90,7 +94,7 @@ list(APPEND NVIM_LINK_LIBRARIES
     ${CMAKE_THREAD_LIBS_INIT})
 
 if(NOT DEFINED ENV{SKIP_EXEC})
-  add_executable(nvim ${NEOVIM_SOURCES} ${OS_SOURCES})
+  add_executable(nvim ${NEOVIM_SOURCES} ${OS_SOURCES} ${NEOVIM_HEADERS} ${OS_HEADERS} ${LIB_HEADERS})
   target_link_libraries(nvim ${NVIM_LINK_LIBRARIES})
   install(TARGETS nvim RUNTIME DESTINATION bin)
 endif()
